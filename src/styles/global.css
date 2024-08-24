@@ -1,0 +1,12 @@
+.full-page-background {
+    height: 100vh;
+    background-image: url(../assets/woxom_health_bg.jpg);
+    background-size: cover;
+    background-position: center;
+}
+
+.text-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

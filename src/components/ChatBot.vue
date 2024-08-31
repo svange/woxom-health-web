@@ -75,6 +75,114 @@
   }
 </script>
 
+<!--<script>-->
+<!--import axios from "axios";-->
+<!--import MarkdownIt from "markdown-it";-->
+<!--import CryptoJS from "crypto-js";-->
+
+<!--const md = new MarkdownIt();-->
+<!--const apiKey = import.meta.env.VITE_OB_API_KEY;-->
+<!--const secretKey = "sorry_nothing_interesting_here_just_for_obfuscation";-->
+<!--const clientId = import.meta.env.VITE_OB_CLIENT_ID;-->
+<!--const defaultProfile = import.meta.env.VITE_OB_DEFAULT_AGENT_CONFIG_PROFILE;-->
+<!--const apiEndpoint = import.meta.env.VITE_API_ENDPOINT;-->
+<!--const encryptedApiKey = CryptoJS.AES.encrypt(apiKey, secretKey).toString();-->
+
+<!--export default {-->
+<!--  data() {-->
+<!--    return {-->
+<!--      userMessage: "",-->
+<!--      chatHistory: [],-->
+<!--      isLoading: false,-->
+<!--      sessionId: null,-->
+<!--      isFirstMessage: true,-->
+<!--    };-->
+<!--  },-->
+<!--  mounted() {-->
+<!--    this.sendInitialMessage();-->
+<!--  },-->
+<!--  methods: {-->
+<!--    decryptApiKey(encryptedApiKey, secretKey) {-->
+<!--      const decrypted = CryptoJS.AES.decrypt(encryptedApiKey, secretKey);-->
+<!--      return decrypted.toString(CryptoJS.enc.Utf8);-->
+<!--    },-->
+<!--    async sendInitialMessage() {-->
+<!--      this.isLoading = true;-->
+<!--      const decryptedApiKey = this.decryptApiKey(encryptedApiKey, secretKey);-->
+<!--      const payload = {-->
+<!--        client_id: clientId,-->
+<!--        reset: true,-->
+<!--        agent_config: defaultProfile,-->
+<!--      };-->
+
+<!--      try {-->
+<!--        const response = await axios.post(apiEndpoint, payload, {-->
+<!--          headers: {-->
+<!--            "x-api-key": decryptedApiKey,-->
+<!--          },-->
+<!--          withCredentials: true,-->
+<!--        });-->
+<!--        this.sessionId = response.data.session_id;-->
+<!--        this.chatHistory.push({-->
+<!--          type: "bot",-->
+<!--          message: response.data.message,-->
+<!--        });-->
+<!--        this.initialMessageReceived = true; // set to true here-->
+<!--      } catch (error) {-->
+<!--        console.error("Error sending initial message:", error);-->
+<!--      } finally {-->
+<!--        this.isLoading = false;-->
+<!--      }-->
+<!--    },-->
+<!--    async sendMessage() {-->
+<!--      this.isLoading = true;-->
+
+<!--      // Immediately show the user's message and avatar-->
+<!--      this.chatHistory.push({-->
+<!--        type: 'user',-->
+<!--        message: this.userMessage,-->
+<!--      });-->
+
+<!--      const decryptedApiKey = this.decryptApiKey(encryptedApiKey, secretKey);-->
+<!--      const payload = {-->
+<!--        client_id: clientId,-->
+<!--        message: this.userMessage,-->
+<!--      };-->
+
+<!--      try {-->
+<!--        const response = await axios.post(apiEndpoint, payload, {-->
+<!--          headers: {-->
+<!--            'x-api-key': decryptedApiKey,-->
+<!--          },-->
+<!--          withCredentials: true,-->
+<!--        });-->
+<!--        // Update the bot's reply-->
+<!--        this.chatHistory.push({-->
+<!--          type: 'bot',-->
+<!--          message: response.data.message,-->
+<!--        });-->
+<!--      } catch (error) {-->
+<!--        console.error('Error sending message:', error);-->
+<!--      } finally {-->
+<!--        this.isLoading = false;-->
+<!--      }-->
+<!--    }-->
+
+<!--  },-->
+<!--  computed: {-->
+<!--    formattedChatHistory() {-->
+<!--      return this.chatHistory.map((entry) => {-->
+<!--        return {-->
+<!--          type: entry.type,-->
+<!--          message: md.render(entry.message),-->
+<!--        };-->
+<!--      });-->
+<!--    },-->
+<!--  },-->
+<!--};-->
+<!--</script>-->
+
+
 <style scoped>
 .chat-bot-btn {
   position: fixed;

@@ -5,13 +5,13 @@
         <v-avatar
           class="me-4"
           color="grey-darken-1"
-          image="../assets/woxom_bot.png"
+          :image="woxomBotImage"
           size="32"
         />
 
         <v-btn
           v-for="link in links"
-          :key="link"
+          :key="link.path"
           text=""
           :to="link.path"
           variant="text"
@@ -45,12 +45,14 @@
 </template>
 
 <script lang="ts" setup>
-  import ChatBot from './components/ChatBot.vue' // Import the ChatBot component
-  const links = [
-    { name: 'Home', path: '/home' },
-    { name: 'Health', path: '/health' },
-    { name: 'Life', path: '/life' },
-    { name: 'Supplemental', path: '/supplemental' },
-    { name: 'About', path: '/about' },
-  ]
+import ChatBot from './components/ChatBot.vue' // Import the ChatBot component
+import woxomBotImage from '@/assets/woxom_bot.png' // Use alias for image path
+
+const links = [
+  { name: 'Home', path: '/home' },
+  { name: 'Health', path: '/health' },
+  { name: 'Life', path: '/life' },
+  { name: 'Supplemental', path: '/supplemental' },
+  { name: 'About', path: '/about' },
+]
 </script>

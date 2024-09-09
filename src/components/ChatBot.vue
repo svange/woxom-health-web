@@ -3,7 +3,7 @@
     <!-- Chat Bot Button -->
     <v-btn
       class="chat-bot-btn"
-      icon
+      icon=""
       large
       @click="toggleChat"
     >

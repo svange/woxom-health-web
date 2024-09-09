@@ -1,0 +1,19 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+augint-tools = "*"
+python-dotenv = "*"
+
+[dev-packages]
+pygithub = "*"
+click = "*"
+python-dotenv = "*"
+requests = "*"
+boto3 = "*"
+augint-tools = "*"
+
+[requires]
+python_version = "3.10"

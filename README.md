@@ -19,7 +19,7 @@ Example style website (copy this): https://woxomhealth.com/
 
 ### Functional Requirements
 
-I am rewriting our site using Vuetify and integrating a chat bot. Our current page can be found at [https://www.woxomhealth.com/](https://www.woxomhealth.com/).
+I am rewriting our site using Vuetify and integrating a chat bot. Our current page can be found at [https://www.openbra.in/](https://www.woxomhealth.com/).
 
 This repo contains some scaffolding of the rebuild. It’s a project using npm/vite/vue/vuetify. To see the current state of the project, run the following command:
 

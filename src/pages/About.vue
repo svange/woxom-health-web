@@ -3,7 +3,6 @@
     height="400"
     :lazy-src="placeholderImage"
     src="../assets/supplement/supplement_bg.jpeg"
-    @error="handleImageError"
   >
     <div class="dark-overlay" />
 
@@ -40,7 +39,6 @@
               :alt="item.alt"
               :lazy-src="placeholderImage"
               :src="item.src"
-              @error="handleImageError"
             />
             <div class="text-h6 text-primary mt-5">{{ item.name }}</div>
           </v-col>
@@ -60,7 +58,6 @@
         height="420px"
         :lazy-src="placeholderImage"
         src="../assets/woxom_bot.png"
-        @error="handleImageError"
       />
     </div>
   </div>
@@ -82,9 +79,4 @@
   ])
 
   const placeholderImage = ref('https://th.bing.com/th/id/OIP.Yw2F5lvYM-R4aFk1fz4XnAHaEK?rs=1&pid=ImgDetMain')
-
-  const handleImageError = (event: { target: { src: any; }; }) => {
-    console.error('Image failed to load:', event)
-    event.target.src = placeholderImage.value
-  }
 </script>

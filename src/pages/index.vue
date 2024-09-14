@@ -3,7 +3,6 @@
     height="93vh"
     :lazy-src="placeholderImage"
     src="../assets/home/woxom_health_bg.jpg"
-    @error="handleImageError"
   >
     <!-- Dark Overlay -->
     <div class="dark-overlay" />
@@ -37,7 +36,6 @@
               alt="Health Image"
               :lazy-src="placeholderImage"
               src="../assets/home/offer_card_1.jpg"
-              @error="handleImageError"
             />
             <v-btn
               class="w-100 my-5 text-none text-subtitle-1"
@@ -60,7 +58,6 @@
               alt="Life Image"
               :lazy-src="placeholderImage"
               src="../assets/home/offer_card_2.jpg"
-              @error="handleImageError"
             />
             <v-btn
               class="w-100 my-5 text-none text-subtitle-1"
@@ -83,7 +80,6 @@
               alt="Life Image"
               :lazy-src="placeholderImage"
               src="../assets/home/offer_card_3.jpg"
-              @error="handleImageError"
             />
             <v-btn
               class="w-100 my-5 text-none text-subtitle-1"
@@ -112,9 +108,4 @@
   import { ref } from 'vue'
 
   const placeholderImage = ref('https://th.bing.com/th/id/OIP.Yw2F5lvYM-R4aFk1fz4XnAHaEK?rs=1&pid=ImgDetMain')
-
-  const handleImageError = (event: { target: { src: any; }; }) => {
-    console.error('Image failed to load:', event);
-    event.target.src = placeholderImage.value;
-  }
 </script>

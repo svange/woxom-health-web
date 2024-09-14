@@ -3,7 +3,6 @@
     height="400"
     :lazy-src="placeholderImage"
     src="../assets/health/health_bg.jpeg"
-    @error="handleImageError"
   >
     <div class="dark-overlay" />
 
@@ -44,7 +43,6 @@
             height="200"
             :lazy-src="placeholderImage"
             :src="image.src"
-            @error="handleImageError"
           />
         </v-col>
       </v-row>
@@ -81,9 +79,4 @@
   ])
 
   const placeholderImage = ref('https://th.bing.com/th/id/OIP.Yw2F5lvYM-R4aFk1fz4XnAHaEK?rs=1&pid=ImgDetMain')
-
-  const handleImageError = (event: { target: { src: any; }; }) => {
-    console.error('Image failed to load:', event)
-    event.target.src = placeholderImage.value
-  }
 </script>

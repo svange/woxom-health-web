@@ -74,9 +74,14 @@
   import MarkdownIt from 'markdown-it';
   import CryptoJS from 'crypto-js';
 
+  interface ChatMessage {
+    type: 'user' | 'bot'; // The type can only be 'user' or 'bot'
+    message: string; // The message will always be a string
+  }
+
   const chatVisible = ref(false)
   const userMessage = ref('')
-  const chatHistory = ref([])
+  const chatHistory = ref<ChatMessage[]>([]) // An array of ChatMessage objects
   const isLoading = ref(false)
   const sessionId = ref(null)
   const initialMessageReceived = ref(false)
@@ -121,8 +126,8 @@
       });
       sessionId.value = response.data.session_id
       chatHistory.value.push({
-          type: 'bot',
-          message: response.data.message,
+        type: 'bot',
+        message: response.data.message,
       })
       initialMessageReceived.value = true
     } catch (error) {
@@ -133,7 +138,7 @@
   }
 
   // Send user message
-  async function sendMessage() {
+  async function sendMessage () {
     isLoading.value = true
 
     chatHistory.value.push({
@@ -167,7 +172,7 @@
 
   // Computed property
   const formattedChatHistory = computed(() =>
-    chatHistory.value.map((entry) => ({
+    chatHistory.value.map((entry: ChatMessage) => ({
       type: entry.type,
       message: md.render(entry.message),
     }))

@@ -1,19 +1,6 @@
 # Single Page Vuetify App
 
-![WoxomHealthWeb](https://github.com/svange/woxom-health-web/actions/workflows/pipeline.yml/badge.svg?event=push)
-
-## Overview
-
-This is a simple single page Vutetify app with integrated chat designed to interact with APIs provided by [OpenBrain](https://www.github.com/svange/openbrain). This project aims to offer a serverless, fast, configurable chat UI that can be used across various domains and applications.
-
-### Find the deployed UIs at the following URLs:
-Due to lambda cold starts, please allow for up to 10 seconds for the chat to start.
-
-Example style website (copy this): https://woxomhealth.com/
-
-#### Woxom
-
-- Production stage: https://www.woxomai.com
+![WoxomHealthWeb](https://github.com/svange/woxom-health-web/actions/workflows/pipeline.yaml/badge.svg?event=push)
 
 ## Initial Requirements
 

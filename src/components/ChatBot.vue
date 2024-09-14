@@ -2,11 +2,11 @@
   <div>
     <!-- Chat Bot Button -->
     <v-btn
-      v-if="initialMessageReceived"
-      class="chat-bot-btn"
-      icon=""
-      size="56"
-      @click="toggleChat"
+        v-if="initialMessageReceived"
+        class="chat-bot-btn"
+        icon=""
+        size="56"
+        @click="toggleChat"
     >
       <v-avatar color="primary" image="../assets/woxom_bot.png" size="56" />
     </v-btn>
@@ -26,23 +26,22 @@
         <v-list-item-group color="primary">
           <div class="pa-4">
             <div
-              v-for="(msg, index) in formattedChatHistory"
-              :key="index"
-              class="d-flex mb-3"
-              :class="msg.type == 'user' ? 'justify-end' : 'justify-start'"
+                v-for="(msg, index) in formattedChatHistory"
+                :key="index"
+                class="d-flex mb-3"
+                :class="msg.type == 'user' ? 'justify-end' : 'justify-start'"
             >
-              <v-avatar v-if="msg.type == 'user'" class="me-2">
-                <v-icon class="text-primary">mdi-account-circle</v-icon>
-              </v-avatar>
-              <v-avatar v-else class="me-2">
+              <v-avatar v-if="msg.type == 'bot'" class="me-2">
                 <v-avatar color="primary" image="../assets/woxom_bot.png" />
               </v-avatar>
               <div
-                class="message-content pa-2 rounded-lg"
-                :class="msg.type == 'user' ? 'bg-primary text-white' : 'bg-grey-lighten-3 text-black'"
-              >
-                {{ msg.message }}
-              </div>
+                  class="message-content pa-2 rounded-lg"
+                  :class="msg.type == 'user' ? 'bg-primary text-white' : 'bg-grey-lighten-3 text-black'"
+                  v-html="msg.message"
+              />
+              <v-avatar v-if="msg.type == 'user'" class="ml-2">
+                <v-icon class="text-primary">mdi-account-circle</v-icon>
+              </v-avatar>
             </div>
           </div>
         </v-list-item-group>
@@ -52,11 +51,11 @@
         <v-row>
           <v-col>
             <v-text-field
-              v-model="userMessage"
-              density="comfortable"
-              placeholder="Type a message"
-              variant="solo"
-              @keyup.enter="sendMessage"
+                v-model="userMessage"
+                density="comfortable"
+                placeholder="Type a message"
+                variant="solo"
+                @keyup.enter="sendMessage"
             />
           </v-col>
           <v-col cols="2">
@@ -69,119 +68,119 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, onMounted, computed } from 'vue';
-  import axios from 'axios';
-  import MarkdownIt from 'markdown-it';
-  import CryptoJS from 'crypto-js';
+import { ref, onMounted, computed } from 'vue';
+import axios from 'axios';
+import MarkdownIt from 'markdown-it';
+import CryptoJS from 'crypto-js';
 
-  interface ChatMessage {
-    type: 'user' | 'bot'; // The type can only be 'user' or 'bot'
-    message: string; // The message will always be a string
+interface ChatMessage {
+  type: 'user' | 'bot'; // The type can only be 'user' or 'bot'
+  message: string; // The message will always be a string
+}
+
+const chatVisible = ref(false)
+const userMessage = ref('')
+const chatHistory = ref<ChatMessage[]>([]) // An array of ChatMessage objects
+const isLoading = ref(false)
+const sessionId = ref(null)
+const initialMessageReceived = ref(false)
+
+const toggleChat = () => {
+  chatVisible.value = !chatVisible.value;
+}
+
+// Initialize MarkdownIt
+const md = new MarkdownIt()
+
+// Environment variables
+const apiKey = import.meta.env.VITE_OB_API_KEY
+const secretKey = 'sorry_nothing_interesting_here_just_for_obfuscation'
+const clientId = import.meta.env.VITE_OB_CLIENT_ID
+const defaultProfile = import.meta.env.VITE_OB_DEFAULT_AGENT_CONFIG_PROFILE
+const apiEndpoint = import.meta.env.VITE_API_ENDPOINT
+const encryptedApiKey = CryptoJS.AES.encrypt(apiKey, secretKey).toString()
+
+// Decrypt API key
+function decryptApiKey (encryptedApiKey: any, secretKey: string) {
+  const decrypted = CryptoJS.AES.decrypt(encryptedApiKey, secretKey);
+  return decrypted.toString(CryptoJS.enc.Utf8);
+}
+
+// Send initial message
+async function sendInitialMessage() {
+  isLoading.value = true
+  const decryptedApiKey = decryptApiKey(encryptedApiKey, secretKey)
+  const payload = {
+    client_id: clientId,
+    reset: true,
+    agent_config: defaultProfile,
   }
 
-  const chatVisible = ref(false)
-  const userMessage = ref('')
-  const chatHistory = ref<ChatMessage[]>([]) // An array of ChatMessage objects
-  const isLoading = ref(false)
-  const sessionId = ref(null)
-  const initialMessageReceived = ref(false)
-
-  const toggleChat = () => {
-    chatVisible.value = !chatVisible.value;
-  }
-
-  // Initialize MarkdownIt
-  const md = new MarkdownIt()
-
-  // Environment variables
-  const apiKey = import.meta.env.VITE_OB_API_KEY
-  const secretKey = 'sorry_nothing_interesting_here_just_for_obfuscation'
-  const clientId = import.meta.env.VITE_OB_CLIENT_ID
-  const defaultProfile = import.meta.env.VITE_OB_DEFAULT_AGENT_CONFIG_PROFILE
-  const apiEndpoint = import.meta.env.VITE_API_ENDPOINT
-  const encryptedApiKey = CryptoJS.AES.encrypt(apiKey, secretKey).toString()
-
-  // Decrypt API key
-  function decryptApiKey (encryptedApiKey: any, secretKey: string) {
-    const decrypted = CryptoJS.AES.decrypt(encryptedApiKey, secretKey);
-    return decrypted.toString(CryptoJS.enc.Utf8);
-  }
-
-  // Send initial message
-  async function sendInitialMessage() {
-    isLoading.value = true
-    const decryptedApiKey = decryptApiKey(encryptedApiKey, secretKey)
-    const payload = {
-      client_id: clientId,
-      reset: true,
-      agent_config: defaultProfile,
-    }
-
-    try {
-      const response = await axios.post(apiEndpoint, payload, {
-        headers: {
-          'x-api-key': decryptedApiKey,
-        },
-        withCredentials: true,
-      });
-      sessionId.value = response.data.session_id
-      chatHistory.value.push({
-        type: 'bot',
-        message: response.data.message,
-      })
-      initialMessageReceived.value = true
-    } catch (error) {
-      console.error('Error sending initial message:', error)
-    } finally {
-      isLoading.value = false
-    }
-  }
-
-  // Send user message
-  async function sendMessage () {
-    isLoading.value = true
-
+  try {
+    const response = await axios.post(apiEndpoint, payload, {
+      headers: {
+        'x-api-key': decryptedApiKey,
+      },
+      withCredentials: true,
+    });
+    sessionId.value = response.data.session_id
     chatHistory.value.push({
-      type: 'user',
-      message: userMessage.value,
+      type: 'bot',
+      message: response.data.message,
     })
+    initialMessageReceived.value = true
+  } catch (error) {
+    console.error('Error sending initial message:', error)
+  } finally {
+    isLoading.value = false
+  }
+}
 
-    const decryptedApiKey = decryptApiKey(encryptedApiKey, secretKey);
-    const payload = {
-      client_id: clientId,
-      message: userMessage.value,
-    }
+// Send user message
+async function sendMessage () {
+  isLoading.value = true
 
-    try {
-      const response = await axios.post(apiEndpoint, payload, {
-        headers: {
-          'x-api-key': decryptedApiKey,
-        },
-        withCredentials: true,
-      })
-      chatHistory.value.push({
-        type: 'bot',
-        message: response.data.message,
-      })
-    } catch (error) {
-      console.error('Error sending message:', error);
-    } finally {
-      isLoading.value = false;
-    }
+  chatHistory.value.push({
+    type: 'user',
+    message: userMessage.value,
+  })
+
+  const decryptedApiKey = decryptApiKey(encryptedApiKey, secretKey);
+  const payload = {
+    client_id: clientId,
+    message: userMessage.value,
   }
 
-  // Computed property
-  const formattedChatHistory = computed(() =>
+  try {
+    const response = await axios.post(apiEndpoint, payload, {
+      headers: {
+        'x-api-key': decryptedApiKey,
+      },
+      withCredentials: true,
+    })
+    chatHistory.value.push({
+      type: 'bot',
+      message: response.data.message,
+    })
+  } catch (error) {
+    console.error('Error sending message:', error);
+  } finally {
+    isLoading.value = false;
+  }
+}
+
+// Computed property
+const formattedChatHistory = computed(() =>
     chatHistory.value.map((entry: ChatMessage) => ({
       type: entry.type,
       message: md.render(entry.message),
     }))
-  )
+)
 
-  // Lifecycle hook
-  onMounted(() => {
-    sendInitialMessage();
-  })
+// Lifecycle hook
+onMounted(() => {
+  sendInitialMessage();
+})
 </script>
 <style scoped>
 .chat-bot-btn {
